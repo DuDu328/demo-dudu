@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>淡入淡出轮播图</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+	<div class="container">
+		<ul class="banner">
+			<li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1499241259&di=2ff02fbccfaf02ec79dc4b304444e6ad&imgtype=jpg&er=1&src=http%3A%2F%2Fdl.bizhi.sogou.com%2Fimages%2F2013%2F09%2F29%2F391672.jpg"></li>
+			<li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646608817&di=5555cbf15efd661a65578440897827b3&imgtype=0&src=http%3A%2F%2Fpic15.photophoto.cn%2F20100615%2F0006019058815826_b.jpg"></li>
+			<li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646647211&di=3514a6cc7bad445901c50b1056498b9f&imgtype=0&src=http%3A%2F%2Fp3.image.hiapk.com%2Fuploads%2Fallimg%2F140814%2F7730-140Q41I921.jpg"></li>
+			<li><img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498646677725&di=2757bfb1e0b6a7e30086942808bc01db&imgtype=0&src=http%3A%2F%2Fwww.pp3.cn%2Fuploads%2F201409%2F2014091305.jpg"></li>
+		</ul>
+		<div class="btn">
+			<div class="prev">&lt;</div>
+			<div class="next">&gt;</div>
+		</div>
+		<ul class="box"></ul>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script>
+		//准备工作
+		var w = $('.container').width();
+		h = $('.container').height();
+		n = $('.banner li').length;
+		tbtn = (h / 2);
+		wbox = (w / 2);
+		wboxleft = (w / 4);
+		blmright = [wbox - (50 * n)] / n;
+		i = 0;
+		$(document).ready(function () {
+			$('.banner').css({
+				width: w,
+				height: h
+			});
+			$('.banner li').css({
+				width: w,
+				height: h
+			});
+			$('.btn').css({
+				width: w * 0.9,
+				top: tbtn,
+				marginLeft: w * 0.05
+			});
+			$('.box').css({
+				width: wbox,
+				left: wboxleft
+			});
+			for (j = 0; j < n; j++) {
+				$('.box').append('<li></li>');
+			};
+			$('.box li').css({
+				marginRight: blmright
+			});
+		});
+		//初始化
+		$(document).ready(function () {
+			$('.banner li').eq(i).stop(true).fadeIn();
+			$('.banner li').eq(i).siblings().stop(true).fadeOut();
+			$('.box li').eq(i).css({
+				background: '#00FA9A'
+			});
+			$('.box li').eq(i).siblings().css({
+				background: 'rgba(188,185,185,0.50)'
+			});
+		});
+		var time = setInterval('next()', 2500);
+		//btn next
+		function next() {
+			i++;
+			if (i > n - 1) {
+				i = 0
+			}
+			$('.banner li').eq(i).stop(true).fadeIn();
+			$('.banner li').eq(i).siblings().stop(true).fadeOut();
+			$('.box li').eq(i).css({
+				background: '#00FA9A'
+			});
+			$('.box li').eq(i).siblings().css({
+				background: 'rgba(188,185,185,0.50)'
+			});
+		};
+		//btn prev
+		function prev() {
+			i--;
+			if (i < 0) {
+				i = n - 1
+			}
+			$('.banner li').eq(i).stop(true).fadeIn();
+			$('.banner li').eq(i).siblings().stop(true).fadeOut();
+			$('.box li').eq(i).css({
+				background: '#00FA9A'
+			});
+			$('.box li').eq(i).siblings().css({
+				background: 'rgba(188,185,185,0.50)'
+			});
+		};
+		//btn
+		$(document).ready(function () {
+			$('.prev').click(function () {
+				prev();
+				clearInterval(time);
+				time = setInterval('next()', 2500);
+			});
+			$('.next').click(function () {
+				next();
+				clearInterval(time);
+				time = setInterval('next()', 2500);
+			});
+		});
+		//box li
+		$(document).ready(function (e) {
+			$('.box li').click(function () {
+				var m = $(this).index();
+				$('.box li').eq(m).css({
+					background: '#00FA9A'
+				});
+				$('.box li').eq(m).siblings().css({
+					background: 'rgba(188,185,185,0.50)'
+				});
+				$('.banner li').eq(m).stop(true).fadeIn();
+				$('.banner li').eq(m).siblings().stop(true).fadeOut();
+				clearInterval(time);
+				time = setInterval('next()', 2500);
+			});
+		});
+		//hover停止
+		$(document).ready(function () {
+			$('.banner').hover(function () {
+				clearInterval(time);
+			}, function () {
+				time = setInterval('next()', 2500);
+			});
+		});
+		$(document).ready(function () {
+			$('.banner').hover(function () {
+				$('.btn').stop(true).fadeIn();
+			}, function () {
+				$('.btn').stop(true).fadeOut();
+			});
+			$('.btn').hover(function () {
+				$('.btn').stop(true).fadeIn();
+			}, function () {
+				$('.btn').stop(true).fadeOut();
+			});
+		});
+	</script>
+</body>
+
+</html>
